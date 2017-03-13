@@ -2,6 +2,8 @@ package com.atguigu.p2p.fragment;
 
 import android.content.Context;
 import android.net.Uri;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -45,20 +47,16 @@ public class HomeFragment extends BaseFragment {
     MyProgressBar myProgress;
 
 
-    @Override
-    protected String setUrl() {
-        return AppNetConfig.INDEX;
-    }
 
     @Override
-    protected int setLayout() {
-        return R.layout.fragment_home;
-    }
-
-    protected void initData(String json) {
+    protected void initData(String json,String error) {
         baseTitle.setText("主页");
         baseBack.setVisibility(View.GONE);
         baseSetting.setVisibility(View.GONE);
+        if(TextUtils.isEmpty(json)) {
+            return;
+        }
+        Log.e("TAG", "HomeFragment initData()"+error);
         HomeBean homeBean = new Gson().fromJson(json, HomeBean.class);
         setBannerData(homeBean);
         myProgress.setProgress(Integer.parseInt(homeBean.getProInfo().getProgress()));
@@ -69,7 +67,15 @@ public class HomeFragment extends BaseFragment {
 
     }
 
+    @Override
+    protected String setUrl() {
+        return AppNetConfig.INDEX;
+    }
 
+    @Override
+    protected int setLayout() {
+        return R.layout.fragment_home;
+    }
 
     private void setBannerData(HomeBean bean) {
         tvHomeProduct.setText(bean.getProInfo().getName());

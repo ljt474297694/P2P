@@ -9,6 +9,8 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ScrollView;
 
+import com.atguigu.p2p.utils.UiUtils;
+
 
 /**
  * Created by 李金桐 on 2017/3/13.
@@ -17,11 +19,13 @@ import android.widget.ScrollView;
  */
 
 public class MyScrollView extends ScrollView {
-    private int lastY;
+
     private View childView;
     private Rect rect;
+    //用于判断动画是否结束 如果动画进行中 不会相应滑动事件
     private boolean isAnimationEnd = true;
-
+    private int lastX;
+    private int lastY;
 
     public MyScrollView(Context context) {
         this(context, null);
@@ -32,6 +36,22 @@ public class MyScrollView extends ScrollView {
         rect = new Rect();
     }
 
+    @Override
+    public boolean onInterceptTouchEvent(MotionEvent ev) {
+        int eventY = (int) ev.getY();
+        int eventX = (int) ev.getX();
+        switch (ev.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                lastX = (int) ev.getX();
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (Math.abs(eventY - lastY) > Math.abs(eventX - lastX) && Math.abs(eventY - lastY) > UiUtils.dp2px(10)) {
+                    return true;
+                }
+                break;
+        }
+        return super.onInterceptTouchEvent(ev);
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
@@ -46,6 +66,10 @@ public class MyScrollView extends ScrollView {
                 break;
             case MotionEvent.ACTION_MOVE:
                 if (isNeedMove()) {
+                    if (lastY == 0) {
+                        //如果等于0表示down事件丢失 从新赋值 防止滑动跳动
+                        lastY = (int) ev.getY();
+                    }
                     if (rect.isEmpty()) {
                         rect.set(childView.getLeft(), childView.getTop(), childView.getRight(), childView.getBottom());
                     }
@@ -57,7 +81,8 @@ public class MyScrollView extends ScrollView {
                 break;
             case MotionEvent.ACTION_UP:
                 if (!rect.isEmpty()) {
-                    int bottom = childView.getBottom() - rect.bottom ;
+
+                    int bottom = childView.getBottom() - rect.bottom;
 
                     TranslateAnimation animation = new TranslateAnimation(0, 0, 0, -bottom);
                     animation.setDuration(200);
@@ -77,6 +102,7 @@ public class MyScrollView extends ScrollView {
                             childView.layout(rect.left, rect.top, rect.right, rect.bottom);
                             //清空
                             rect.setEmpty();
+                            lastY = 0; //赋0
                         }
 
                         @Override

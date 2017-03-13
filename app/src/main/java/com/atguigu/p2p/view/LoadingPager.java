@@ -15,10 +15,10 @@ import okhttp3.Call;
 /**
  * Created by 李金桐 on 2017/3/13.
  * QQ: 474297694
- * 功能: xxxx
+ * 功能: LoadingPager
  */
 
-public abstract class LoadingPage extends FrameLayout {
+public abstract class LoadingPager extends FrameLayout {
 
     private Context mContext;
 
@@ -35,16 +35,16 @@ public abstract class LoadingPage extends FrameLayout {
 
     private LayoutParams params;
 
-    public LoadingPage(Context context) {
+    public LoadingPager(Context context) {
         this(context, null);
     }
 
-    public LoadingPage(Context context, AttributeSet attrs) {
+    public LoadingPager(Context context, AttributeSet attrs) {
         super(context, attrs);
         this.mContext = context;
         init();
     }
-
+    //初始化各个布局
     private void init() {
 
         //设置全屏属性
@@ -67,7 +67,7 @@ public abstract class LoadingPage extends FrameLayout {
         showStateView();
     }
 
-
+    //根据状态切换页面
     private void showStateView() {
         //是否展示错误页面
         errorView.setVisibility(
@@ -88,7 +88,7 @@ public abstract class LoadingPage extends FrameLayout {
             @Override
             public void onError(Call call, Exception e, int id) {
                 current_state = STATE_ERROR;
-                onSuccess(e.getMessage(), sucessView);
+                onSuccess("",e.getMessage(), sucessView);
                 showStateView();
             }
 
@@ -96,10 +96,10 @@ public abstract class LoadingPage extends FrameLayout {
             public void onResponse(String response, int id) {
                 if(TextUtils.isEmpty(response)) {
                     current_state = STATE_EMPTY;
-                    onSuccess("", sucessView);
+                    onSuccess("","请求结果为空", sucessView);
                 }else{
                     current_state = STATE_SUCCESS;
-                    onSuccess(response, sucessView);
+                    onSuccess(response,"请求成功", sucessView);
                 }
                 showStateView();
             }
@@ -111,6 +111,7 @@ public abstract class LoadingPage extends FrameLayout {
 
     protected abstract int setLayoutId();
 
-    protected abstract void onSuccess(String json, View sucessView);
+
+    protected abstract void onSuccess(String json,String error, View sucessView);
 
 }
