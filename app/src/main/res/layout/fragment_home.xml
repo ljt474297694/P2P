@@ -7,7 +7,7 @@
 
     <include layout="@layout/base_head"></include>
 
-    <ScrollView
+    <com.atguigu.p2p.view.MyScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -170,6 +170,6 @@
         </LinearLayout>
 
 
-    </ScrollView>
+    </com.atguigu.p2p.view.MyScrollView>
 
 </LinearLayout>

@@ -17,20 +17,20 @@ import com.atguigu.p2p.utils.UiUtils;
 /**
  * Created by 李金桐 on 2017/3/13.
  * QQ: 474297694
- * 功能: xxxx
+ * 功能: 自定义进度条
  */
 
 public class MyProgressBar extends View {
 
     private int viewHeight;
     private int viewWidth;
-    private float progressWidth;
+    private float progressWidth; //progress宽度
     private Paint paint;
-    private int bgColor;
-    private int srcColor;
-    private int textColor;
-    private int sweepArc;
-    private float textSize;
+    private int bgColor;//背景圆环颜色
+    private int srcColor;//前景圆环颜色
+    private int textColor;//字体颜色
+    private int sweepArc;//当前弧度
+    private float textSize;//字体大小
 
     public MyProgressBar(Context context) {
         this(context, null);
@@ -39,14 +39,24 @@ public class MyProgressBar extends View {
     public MyProgressBar(Context context, AttributeSet attrs) {
         super(context, attrs);
         init();
-        TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.progress);
-        bgColor = array.getColor(R.styleable.progress_bgColor, Color.GRAY);
-        srcColor = array.getColor(R.styleable.progress_srcColor, Color.RED);
-        textColor = array.getColor(R.styleable.progress_textColor, Color.BLUE);
-        sweepArc = array.getInt(R.styleable.progress_sweepArc, 0);
-        progressWidth = array.getDimension(R.styleable.progress_progressWidth, UiUtils.dp2px(8));
-        textSize = array.getDimension(R.styleable.progress_textSize, UiUtils.dp2px(16));
-        array.recycle();
+        if (attrs != null) {
+            TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.progress);
+            bgColor = array.getColor(R.styleable.progress_bgColor, Color.GRAY);
+            srcColor = array.getColor(R.styleable.progress_srcColor, Color.RED);
+            textColor = array.getColor(R.styleable.progress_textColor, Color.BLUE);
+            sweepArc = array.getInt(R.styleable.progress_sweepArc, 0);
+            progressWidth = array.getDimension(R.styleable.progress_progressWidth, UiUtils.dp2px(8));
+            textSize = array.getDimension(R.styleable.progress_textSize, UiUtils.dp2px(16));
+            array.recycle();
+        } else {
+            bgColor = Color.GRAY;
+            srcColor = Color.RED;
+            textColor = Color.BLUE;
+            sweepArc = 0;
+            progressWidth = UiUtils.dp2px(8);
+            textSize = UiUtils.dp2px(16);
+        }
+
     }
 
     //初始化 画笔
@@ -71,7 +81,7 @@ public class MyProgressBar extends View {
         paint.setColor(bgColor);
         canvas.drawCircle(cx, cy, radius, paint);
 
-        //前面的弧
+        //前景的弧
         paint.setStrokeWidth(progressWidth);
         paint.setColor(srcColor);
         RectF rectf = new RectF(progressWidth / 2, progressWidth / 2, viewWidth - progressWidth / 2, viewHeight - progressWidth / 2);
@@ -99,7 +109,10 @@ public class MyProgressBar extends View {
         viewWidth = getMeasuredWidth();
     }
 
+    //传入当前百分比即可 0~100
     public void setProgress(int progress) {
+        progress = progress > 100 ? 100 : progress;
+        progress = progress < 0 ? 0 : progress;
         sweepArc = progress;
         postInvalidate();
     }
