@@ -24,11 +24,13 @@ public class MyProgressBar extends View {
 
     private int viewHeight;
     private int viewWidth;
-    private int progressWidth = UiUtils.dp2px(5);
+    private float progressWidth;
     private Paint paint;
-    private int circleColor = Color.GRAY;
-    private int arcColor = Color.RED;
-    private int sweepArc = 120;
+    private int bgColor;
+    private int srcColor;
+    private int textColor;
+    private int sweepArc;
+    private float textSize;
 
     public MyProgressBar(Context context) {
         this(context, null);
@@ -38,16 +40,22 @@ public class MyProgressBar extends View {
         super(context, attrs);
         init();
         TypedArray array = context.obtainStyledAttributes(attrs, R.styleable.progress);
+        bgColor = array.getColor(R.styleable.progress_bgColor, Color.GRAY);
+        srcColor = array.getColor(R.styleable.progress_srcColor, Color.RED);
+        textColor = array.getColor(R.styleable.progress_textColor, Color.BLUE);
+        sweepArc = array.getInt(R.styleable.progress_sweepArc, 0);
+        progressWidth = array.getDimension(R.styleable.progress_progressWidth, UiUtils.dp2px(8));
+        textSize = array.getDimension(R.styleable.progress_textSize, UiUtils.dp2px(16));
         array.recycle();
     }
 
+    //初始化 画笔
     private void init() {
         paint = new Paint();
 
         paint.setAntiAlias(true);
 
         paint.setStyle(Paint.Style.STROKE);
-
 
     }
 
@@ -57,28 +65,29 @@ public class MyProgressBar extends View {
         super.onDraw(canvas);
         int cx = viewWidth / 2;
         int cy = viewHeight / 2;
-        int radius = viewWidth / 2 - progressWidth / 2;
+        float radius = viewWidth / 2 - progressWidth / 2;
         //背景圆
         paint.setStrokeWidth(progressWidth);
-        paint.setColor(circleColor);
+        paint.setColor(bgColor);
         canvas.drawCircle(cx, cy, radius, paint);
 
         //前面的弧
         paint.setStrokeWidth(progressWidth);
-        paint.setColor(arcColor);
+        paint.setColor(srcColor);
         RectF rectf = new RectF(progressWidth / 2, progressWidth / 2, viewWidth - progressWidth / 2, viewHeight - progressWidth / 2);
-        canvas.drawArc(rectf, 0, sweepArc, false, paint);
+        canvas.drawArc(rectf, 0, sweepArc * 360 / 100, false, paint);
 
         //文字
-        String text = sweepArc * 100 / 360 + "%";
+        String text = sweepArc + "%";
+        //包裹文字 计算文字宽度
         Rect bounds = new Rect();
         paint.getTextBounds(text, 0, text.length(), bounds);
 
         float tx = viewWidth / 2 - bounds.width() / 2;
-        float ty = viewHeight /2 + bounds.height() / 2;
+        float ty = viewHeight / 2 + bounds.height() / 2;
         paint.setStrokeWidth(0);
-        paint.setTextSize(UiUtils.dp2px(18));
-        paint.setColor(Color.BLUE);
+        paint.setTextSize(textSize);
+        paint.setColor(textColor);
         canvas.drawText(text, tx, ty, paint);
 
     }
@@ -88,5 +97,10 @@ public class MyProgressBar extends View {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         viewHeight = getMeasuredHeight();
         viewWidth = getMeasuredWidth();
+    }
+
+    public void setProgress(int progress) {
+        sweepArc = progress;
+        postInvalidate();
     }
 }

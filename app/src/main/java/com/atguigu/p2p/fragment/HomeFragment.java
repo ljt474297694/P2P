@@ -3,6 +3,7 @@ package com.atguigu.p2p.fragment;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -16,6 +17,8 @@ import com.atguigu.p2p.R;
 import com.atguigu.p2p.bean.HomeBean;
 import com.atguigu.p2p.utils.AppNetConfig;
 import com.atguigu.p2p.utils.NetUtils;
+import com.atguigu.p2p.utils.ThreadPool;
+import com.atguigu.p2p.view.MyProgressBar;
 import com.squareup.picasso.Picasso;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -47,6 +50,8 @@ public class HomeFragment extends Fragment {
     ImageView baseSetting;
     @Bind(R.id.banner)
     Banner banner;
+    @Bind(R.id.my_progress)
+    MyProgressBar myProgress;
 
     @Nullable
     @Override
@@ -70,13 +75,26 @@ public class HomeFragment extends Fragment {
     private void initData() {
         NetUtils.getInstance().asyncHttpPost(AppNetConfig.INDEX, HomeBean.class, new NetUtils.resultBean<HomeBean>() {
             @Override
-            public void onResponse(HomeBean o) {
-                setBannerData(o);
+            public void onResponse(HomeBean bean) {
+                setBannerData(bean);
+                setProgress(bean.getProInfo());
             }
 
             @Override
             public void onError(String error) {
                 Log.e("TAG", "HomeFragment onError()=" + error);
+            }
+        });
+    }
+
+    private void setProgress(final HomeBean.ProInfoBean proInfo) {
+        ThreadPool.getInstance().startThread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i <= Integer.parseInt(proInfo.getProgress()); i++) {
+                    SystemClock.sleep(30);
+                    myProgress.setProgress(i);
+                }
             }
         });
     }

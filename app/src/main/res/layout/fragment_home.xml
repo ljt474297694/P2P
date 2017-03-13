@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:atguigu="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <include layout="@layout/base_head"></include>
@@ -110,8 +110,12 @@
             <!--atguigu:progress="70"-->
             <!--/>-->
             <com.atguigu.p2p.view.MyProgressBar
+                android:id="@+id/my_progress"
                 android:layout_width="120dp"
                 android:layout_height="120dp"
+                app:progressWidth ="10dp"
+                app:textSize="20sp"
+                app:textColor="#14266e"
                 android:layout_marginTop="5dp">
             </com.atguigu.p2p.view.MyProgressBar>
 
