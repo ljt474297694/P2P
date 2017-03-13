@@ -12,6 +12,7 @@ import com.atguigu.p2p.fragment.HomeFragment;
 import com.atguigu.p2p.fragment.InvestFragment;
 import com.atguigu.p2p.fragment.MoreFragment;
 import com.atguigu.p2p.fragment.PropertyFragment;
+import com.atguigu.p2p.utils.AppManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -33,6 +34,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+        AppManager.getInstance().addActivity(this);
         initData();
         initListener();
     }
@@ -96,5 +98,11 @@ public class MainActivity extends AppCompatActivity {
         if (System.currentTimeMillis() - time < 2000)   finish();
         time = System.currentTimeMillis();
         Toast.makeText(MainActivity.this, "双击退出应用", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        AppManager.getInstance().removeActivity(this);
     }
 }

@@ -29,5 +29,5 @@ public class AppNetConfig {
 
     public static final String REGISTER =BASE_URL +"UserRegister";//注册
 
-    public static final String FEEDBACK =BASE_URL +"FeedBack";//用户反馈
+    public static final String FEEDBACK =BASE_URL +"FeedBack";//用户反馈 
 }

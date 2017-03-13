@@ -12,6 +12,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atguigu.p2p.R;
+import com.atguigu.p2p.utils.AppManager;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -30,6 +31,7 @@ public class SplashActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
         ButterKnife.bind(this);
+        AppManager.getInstance().addActivity(this);
         initData();
     }
 
@@ -52,7 +54,7 @@ public class SplashActivity extends AppCompatActivity {
             public void onAnimationEnd(Animation animation) {
 
                 startActivity(new Intent(SplashActivity.this,MainActivity.class));
-                finish();
+                AppManager.getInstance().removeActivity(SplashActivity.this);
             }
 
             @Override
@@ -80,4 +82,8 @@ public class SplashActivity extends AppCompatActivity {
         return "1.0";
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 }

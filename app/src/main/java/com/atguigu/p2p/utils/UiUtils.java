@@ -34,7 +34,6 @@ public class UiUtils {
     public static int dp2px(int dp) {
         float density = getContext().getResources().getDisplayMetrics().density;
         return (int) (density * dp + 0.5);
-
     }
 
     public static int px2dp(int px) {

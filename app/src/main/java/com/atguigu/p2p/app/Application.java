@@ -23,6 +23,8 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         application = this;
+        //上线阶段才会开启收集Bug类
+//        CrashHandler.getInstance().init();
     }
 
     public static Context getInstance() {
