@@ -2,8 +2,6 @@ package com.atguigu.p2p.fragment;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.SystemClock;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,9 +9,8 @@ import android.widget.TextView;
 import com.atguigu.p2p.R;
 import com.atguigu.p2p.bean.HomeBean;
 import com.atguigu.p2p.utils.AppNetConfig;
-import com.atguigu.p2p.utils.NetUtils;
-import com.atguigu.p2p.utils.ThreadPool;
 import com.atguigu.p2p.view.MyProgressBar;
+import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
@@ -49,31 +46,22 @@ public class HomeFragment extends BaseFragment {
 
 
     @Override
+    protected String setUrl() {
+        return AppNetConfig.INDEX;
+    }
+
+    @Override
     protected int setLayout() {
         return R.layout.fragment_home;
     }
 
-    protected void initData() {
+    protected void initData(String json) {
         baseTitle.setText("主页");
         baseBack.setVisibility(View.GONE);
         baseSetting.setVisibility(View.GONE);
-        getDataFromNet();
-
-    }
-
-    private void getDataFromNet() {
-        NetUtils.getInstance().asyncHttpPost(AppNetConfig.INDEX, HomeBean.class, new NetUtils.resultBean<HomeBean>() {
-            @Override
-            public void onResponse(HomeBean bean) {
-                setBannerData(bean);
-                setProgress(bean.getProInfo());
-            }
-
-            @Override
-            public void onError(String error) {
-                Log.e("TAG", "HomeFragment onError()=" + error);
-            }
-        });
+        HomeBean homeBean = new Gson().fromJson(json, HomeBean.class);
+        setBannerData(homeBean);
+        myProgress.setProgress(Integer.parseInt(homeBean.getProInfo().getProgress()));
     }
 
     @Override
@@ -81,17 +69,7 @@ public class HomeFragment extends BaseFragment {
 
     }
 
-    private void setProgress(final HomeBean.ProInfoBean proInfo) {
-        ThreadPool.getInstance().startThread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i <= Integer.parseInt(proInfo.getProgress()); i++) {
-                    SystemClock.sleep(30);
-                    myProgress.setProgress(i);
-                }
-            }
-        });
-    }
+
 
     private void setBannerData(HomeBean bean) {
         tvHomeProduct.setText(bean.getProInfo().getName());

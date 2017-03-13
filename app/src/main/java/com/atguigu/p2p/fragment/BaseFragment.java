@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.atguigu.p2p.view.LoadingPage;
+
 import butterknife.ButterKnife;
 
 /**
@@ -16,24 +18,44 @@ import butterknife.ButterKnife;
  */
 
 public  abstract class BaseFragment extends Fragment {
+
+    private LoadingPage loadingPage;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), setLayout(), null);
-        ButterKnife.bind(this,view);
-        return view;
-    }
+        loadingPage = new LoadingPage(getActivity()) {
+            @Override
+            public String setUrl() {
+                return BaseFragment.this.setUrl();
+            }
+
+            @Override
+            public int setLayoutId() {
+                return setLayout();
+            }
+
+            @Override
+            protected void onSuccess(String json, View sucessView) {
+                ButterKnife.bind(BaseFragment.this,sucessView);
+                initData(json);
+            }
+        };
+    return loadingPage;
+}
+
+    protected abstract String setUrl() ;
 
     protected abstract int setLayout();
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        initData();
+        loadingPage.loadData();
         initListener();
     }
 
-    protected abstract void initData();
+    protected abstract void initData(String json);
 
     protected abstract void initListener();
     @Override

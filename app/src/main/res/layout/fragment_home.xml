@@ -115,7 +115,9 @@
                 android:layout_height="120dp"
                 android:layout_marginTop="5dp"
                 app:progressWidth="10dp"
-                app:textColor="#14266e"
+                app:textColor="#0b2381"
+                app:srcColor="#e8da0b4d"
+                app:bgColor="#66000000"
                 app:textSize="20sp"></com.atguigu.p2p.view.MyProgressBar>
 
             <LinearLayout

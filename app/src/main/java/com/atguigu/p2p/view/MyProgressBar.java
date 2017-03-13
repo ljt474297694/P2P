@@ -7,10 +7,12 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.os.SystemClock;
 import android.util.AttributeSet;
 import android.view.View;
 
 import com.atguigu.p2p.R;
+import com.atguigu.p2p.utils.ThreadPool;
 import com.atguigu.p2p.utils.UiUtils;
 
 
@@ -110,10 +112,17 @@ public class MyProgressBar extends View {
     }
 
     //传入当前百分比即可 0~100
-    public void setProgress(int progress) {
-        progress = progress > 100 ? 100 : progress;
-        progress = progress < 0 ? 0 : progress;
-        sweepArc = progress;
-        postInvalidate();
+    public void setProgress(final int progress) {
+        ThreadPool.getInstance().startThread(new Runnable() {
+            @Override
+            public void run() {
+                for (int i = 0; i <= progress; i++) {
+                    SystemClock.sleep(30);
+                    sweepArc = i;
+                    postInvalidate();
+                }
+            }
+        });
+
     }
 }
