@@ -2,14 +2,9 @@ package com.atguigu.p2p.fragment;
 
 import android.content.Context;
 import android.net.Uri;
-import android.os.Bundle;
 import android.os.SystemClock;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,7 +24,6 @@ import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
 /**
  * Created by 李金桐 on 2017/3/10.
@@ -37,7 +31,7 @@ import butterknife.ButterKnife;
  * 功能: xxxx
  */
 
-public class HomeFragment extends Fragment {
+public class HomeFragment extends BaseFragment {
     @Bind(R.id.base_title)
     TextView baseTitle;
     @Bind(R.id.tv_home_product)
@@ -53,26 +47,21 @@ public class HomeFragment extends Fragment {
     @Bind(R.id.my_progress)
     MyProgressBar myProgress;
 
-    @Nullable
+
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = View.inflate(getActivity(), R.layout.fragment_home, null);
-        ButterKnife.bind(this, view);
+    protected int setLayout() {
+        return R.layout.fragment_home;
+    }
+
+    protected void initData() {
         baseTitle.setText("主页");
         baseBack.setVisibility(View.GONE);
         baseSetting.setVisibility(View.GONE);
-        return view;
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        initData();
+        getDataFromNet();
 
     }
 
-    private void initData() {
+    private void getDataFromNet() {
         NetUtils.getInstance().asyncHttpPost(AppNetConfig.INDEX, HomeBean.class, new NetUtils.resultBean<HomeBean>() {
             @Override
             public void onResponse(HomeBean bean) {
@@ -85,6 +74,11 @@ public class HomeFragment extends Fragment {
                 Log.e("TAG", "HomeFragment onError()=" + error);
             }
         });
+    }
+
+    @Override
+    protected void initListener() {
+
     }
 
     private void setProgress(final HomeBean.ProInfoBean proInfo) {
@@ -142,9 +136,5 @@ public class HomeFragment extends Fragment {
 
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        ButterKnife.unbind(this);
-    }
+
 }
