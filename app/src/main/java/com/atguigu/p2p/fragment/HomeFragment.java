@@ -7,15 +7,18 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.atguigu.p2p.R;
 import com.atguigu.p2p.bean.HomeBean;
 import com.atguigu.p2p.utils.AppNetConfig;
 import com.atguigu.p2p.view.MyProgressBar;
+import com.atguigu.p2p.view.MyScrollView;
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
-import com.squareup.picasso.Picasso;
 import com.youth.banner.Banner;
 import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerListener;
 import com.youth.banner.loader.ImageLoader;
 
 import java.util.ArrayList;
@@ -45,25 +48,58 @@ public class HomeFragment extends BaseFragment {
     Banner banner;
     @Bind(R.id.my_progress)
     MyProgressBar myProgress;
-
+    @Bind(R.id.myscrollview)
+    MyScrollView myscrollview;
 
 
     @Override
-    protected void initData(String json,String error) {
+    protected void initData(String json, String error) {
         baseTitle.setText("主页");
         baseBack.setVisibility(View.GONE);
         baseSetting.setVisibility(View.GONE);
-        if(TextUtils.isEmpty(json)) {
+        if (TextUtils.isEmpty(json)) {
+            Log.e("TAG", "HomeFragment initData()" + error);
             return;
         }
-        Log.e("TAG", "HomeFragment initData()"+error);
         HomeBean homeBean = new Gson().fromJson(json, HomeBean.class);
         setBannerData(homeBean);
         myProgress.setProgress(Integer.parseInt(homeBean.getProInfo().getProgress()));
     }
 
     @Override
+    public void onStop() {
+        super.onStop();
+        banner.stopAutoPlay();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //开始轮播
+        if (banner != null) {
+            banner.startAutoPlay();
+        }
+    }
+
+    @Override
     protected void initListener() {
+        banner.setOnBannerListener(new OnBannerListener() {
+            @Override
+            public void OnBannerClick(int position) {
+                Toast.makeText(getActivity(), "Banner=" + position, Toast.LENGTH_SHORT).show();
+            }
+        });
+        myscrollview.setOnScrollListener(new MyScrollView.OnScrollListener() {
+            @Override
+            public void onStartScroll() {
+                banner.stopAutoPlay();
+            }
+
+            @Override
+            public void onEndScroll() {
+                banner.startAutoPlay();
+            }
+        });
 
     }
 
@@ -99,6 +135,10 @@ public class HomeFragment extends BaseFragment {
 
     }
 
+
+
+
+
     public class GlideImageLoader extends ImageLoader {
         @Override
         public void displayImage(Context context, Object path, ImageView imageView) {
@@ -111,7 +151,7 @@ public class HomeFragment extends BaseFragment {
              */
 
             //Picasso 加载图片简单用法
-            Picasso.with(context).load((String) path).into(imageView);
+            Glide.with(context).load(path).into(imageView);
 
             //用fresco加载图片简单用法，记得要写下面的createImageView方法
             Uri uri = Uri.parse((String) path);

@@ -60,8 +60,6 @@ public abstract class LoadingPager extends FrameLayout {
         errorView = View.inflate(mContext, R.layout.page_error, null);
         addView(errorView, params);
 
-        sucessView = View.inflate(mContext, setLayoutId(), null);
-        addView(sucessView, params);
 
         //根据状态切换页面 默认是loading
         showStateView();
@@ -79,11 +77,23 @@ public abstract class LoadingPager extends FrameLayout {
         emptyView.setVisibility(
                 current_state == STATE_EMPTY ? View.VISIBLE : View.INVISIBLE);
         //是否展示成功页面
-        sucessView.setVisibility(
-                current_state == STATE_SUCCESS ? View.VISIBLE : View.INVISIBLE);
+        if(sucessView!=null) {
+            sucessView.setVisibility(
+                    current_state == STATE_SUCCESS ? View.VISIBLE : View.INVISIBLE);
+        }
     }
     //加载数据回调给实现类
     public void loadData() {
+
+        if(setUrl()==null) {
+            sucessView = View.inflate(mContext, setLayoutId(), null);
+            addView(sucessView, params);
+
+            current_state = STATE_SUCCESS;
+            showStateView();
+            onSuccess("","无url 无法请求", sucessView);
+            return;
+        }
         OkHttpUtils.post().url(setUrl()).build().execute(new StringCallback() {
             @Override
             public void onError(Call call, Exception e, int id) {
@@ -98,6 +108,9 @@ public abstract class LoadingPager extends FrameLayout {
                     current_state = STATE_EMPTY;
                     onSuccess("","请求结果为空", sucessView);
                 }else{
+                    sucessView = View.inflate(mContext, setLayoutId(), null);
+                    addView(sucessView, params);
+
                     current_state = STATE_SUCCESS;
                     onSuccess(response,"请求成功", sucessView);
                 }

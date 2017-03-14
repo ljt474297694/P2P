@@ -9,8 +9,6 @@ import android.view.animation.Animation;
 import android.view.animation.TranslateAnimation;
 import android.widget.ScrollView;
 
-import com.atguigu.p2p.utils.UiUtils;
-
 
 /**
  * Created by 李金桐 on 2017/3/13.
@@ -36,22 +34,26 @@ public class MyScrollView extends ScrollView {
         rect = new Rect();
     }
 
-    @Override
-    public boolean onInterceptTouchEvent(MotionEvent ev) {
-        int eventY = (int) ev.getY();
-        int eventX = (int) ev.getX();
-        switch (ev.getAction()) {
-            case MotionEvent.ACTION_DOWN:
-                lastX = (int) ev.getX();
-                break;
-            case MotionEvent.ACTION_MOVE:
-                if (Math.abs(eventY - lastY) > Math.abs(eventX - lastX) && Math.abs(eventY - lastY) > UiUtils.dp2px(10)) {
-                    return true;
-                }
-                break;
-        }
-        return super.onInterceptTouchEvent(ev);
-    }
+//    @Override
+//    public boolean onInterceptTouchEvent(MotionEvent ev) {
+//        int eventY = (int) ev.getY();
+//        int eventX = (int) ev.getX();
+//        switch (ev.getAction()) {
+//            case MotionEvent.ACTION_DOWN:
+//                lastX = (int) ev.getX();
+//                break;
+//            case MotionEvent.ACTION_MOVE:
+//                if (Math.abs(eventY - lastY) > Math.abs(eventX - lastX) && Math.abs(eventY - lastY) > UiUtils.dp2px(10)) {
+//                    return true;
+//                }
+//                break;
+//            case MotionEvent.ACTION_UP:
+//
+//
+//                break;
+//        }
+//        return super.onInterceptTouchEvent(ev);
+//    }
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
@@ -68,10 +70,14 @@ public class MyScrollView extends ScrollView {
                 if (isNeedMove()) {
                     if (lastY == 0) {
                         //如果等于0表示down事件丢失 从新赋值 防止滑动跳动
-                        lastY = (int) ev.getY();
+                        lastY = eventY;
+
                     }
-                    if (rect.isEmpty()) {
+                    if(rect.isEmpty()) {
                         rect.set(childView.getLeft(), childView.getTop(), childView.getRight(), childView.getBottom());
+                    }
+                    if(l!=null) {
+                        l.onStartScroll();
                     }
                     int dy = eventY - lastY;
                     childView.layout(childView.getLeft(), childView.getTop() + dy / 2
@@ -101,8 +107,11 @@ public class MyScrollView extends ScrollView {
                             //回归原式位置
                             childView.layout(rect.left, rect.top, rect.right, rect.bottom);
                             //清空
-                            rect.setEmpty();
                             lastY = 0; //赋0
+                            lastX = 0;
+                            if(l!=null) {
+                                l.onEndScroll();
+                            }
                         }
 
                         @Override
@@ -140,6 +149,16 @@ public class MyScrollView extends ScrollView {
         //判断
         if (getChildCount() > 0) {
             childView = getChildAt(0);
+
         }
+    }
+    public interface OnScrollListener{
+        void onStartScroll();
+        void onEndScroll();
+    }
+    private OnScrollListener l;
+
+    public void setOnScrollListener(OnScrollListener l) {
+        this.l = l;
     }
 }

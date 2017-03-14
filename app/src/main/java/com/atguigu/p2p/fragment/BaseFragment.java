@@ -36,9 +36,10 @@ public  abstract class BaseFragment extends Fragment {
             }
 
             @Override
-            protected void onSuccess(String json,String error, View sucessView) {
-                ButterKnife.bind(BaseFragment.this,sucessView);
-                initData(json,error);
+            protected void onSuccess(String json, String error, View sucessView) {
+                ButterKnife.bind(BaseFragment.this, sucessView);
+                initData(json, error);
+                initListener();
             }
         };
     return loadingPage;
@@ -52,7 +53,6 @@ public  abstract class BaseFragment extends Fragment {
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         loadingPage.loadData();
-        initListener();
     }
 
     protected abstract void initData(String json,String error);
