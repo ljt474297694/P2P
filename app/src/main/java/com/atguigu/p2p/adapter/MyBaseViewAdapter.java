@@ -15,11 +15,11 @@ import java.util.List;
  * 功能: xxxx
  */
 
-public abstract class BaseInvestAllAdapter1<Bean> extends BaseAdapter {
+public abstract class MyBaseViewAdapter<Bean> extends BaseAdapter {
 
     private List<Bean> list = new ArrayList<>();
 
-    public BaseInvestAllAdapter1(List<Bean> list) {
+    public MyBaseViewAdapter(List<Bean> list) {
         if (list != null && list.size() > 0) {
             this.list.clear();
             this.list.addAll(list);

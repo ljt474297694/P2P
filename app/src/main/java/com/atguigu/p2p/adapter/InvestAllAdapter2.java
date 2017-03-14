@@ -12,7 +12,7 @@ import java.util.List;
  * 功能: xxxx
  */
 
-public class InvestAllAdapter2 extends BaseInvestAllAdapter1<InvestAllBean.DataBean> {
+public class InvestAllAdapter2 extends MyBaseViewAdapter<InvestAllBean.DataBean> {
 
     public InvestAllAdapter2(List<InvestAllBean.DataBean> list) {
         super(list);

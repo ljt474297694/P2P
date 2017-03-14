@@ -39,7 +39,6 @@ public class InvestViewHolder extends BaseHolder<InvestAllBean.DataBean> {
 
     @Override
     protected void bindViewData() {
-        InvestAllBean.DataBean data = getData();
         pName.setText(data.getName());
     }
 }
