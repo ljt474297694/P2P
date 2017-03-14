@@ -113,16 +113,23 @@ public class MyProgressBar extends View {
 
     //传入当前百分比即可 0~100
     public void setProgress(final int progress) {
-        ThreadPool.getInstance().startThread(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i <= progress; i++) {
-                    SystemClock.sleep(30);
-                    sweepArc = i;
-                    postInvalidate();
+
+        if(sweepArc==0) {
+            ThreadPool.getInstance().startThread(new Runnable() {
+                @Override
+                public void run() {
+                    for (int i = 0; i <= progress; i++) {
+                        SystemClock.sleep(30);
+                        sweepArc = i;
+                        postInvalidate();
+                    }
                 }
-            }
-        });
+            });
+        }else{
+            sweepArc = progress;
+            postInvalidate();
+        }
+
 
     }
 }

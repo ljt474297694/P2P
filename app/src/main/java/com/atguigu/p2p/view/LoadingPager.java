@@ -89,7 +89,7 @@ public abstract class LoadingPager extends FrameLayout {
             if(setLayoutId()==0) {
                 current_state = STATE_ERROR;
                 showStateView();
-                return;
+
             }
             sucessView = View.inflate(mContext, setLayoutId(), null);
             addView(sucessView, params);

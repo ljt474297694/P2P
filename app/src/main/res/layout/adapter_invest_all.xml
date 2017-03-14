@@ -252,7 +252,12 @@
             android:id="@+id/p_progresss"
             android:layout_width="50dp"
             android:layout_height="50dp"
-            android:layout_marginLeft="20dp">
+            android:layout_marginLeft="20dp"
+            app:progressWidth="5dp"
+            app:textSize="12sp"
+            app:textColor="#0b2381"
+            app:srcColor="#e8da0b4d"
+            app:bgColor="#66000000">
         </com.atguigu.p2p.view.MyProgressBar>
     </LinearLayout>
 

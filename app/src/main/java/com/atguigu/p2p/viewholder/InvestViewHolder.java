@@ -40,5 +40,6 @@ public class InvestViewHolder extends BaseHolder<InvestAllBean.DataBean> {
     @Override
     protected void bindViewData() {
         pName.setText(data.getName());
+        pProgresss.setProgress(Integer.parseInt(data.getProgress()));
     }
 }
