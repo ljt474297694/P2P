@@ -1,9 +1,7 @@
 package com.atguigu.p2p.activity;
 
-import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
@@ -12,12 +10,10 @@ import com.atguigu.p2p.fragment.HomeFragment;
 import com.atguigu.p2p.fragment.InvestFragment;
 import com.atguigu.p2p.fragment.MoreFragment;
 import com.atguigu.p2p.fragment.PropertyFragment;
-import com.atguigu.p2p.utils.AppManager;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @Bind(R.id.main_rg)
     RadioGroup mainRg;
@@ -29,25 +25,27 @@ public class MainActivity extends AppCompatActivity {
 
     private Fragment tempFragment;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        AppManager.getInstance().addActivity(this);
-        initData();
-        initListener();
+    protected int setLayoutId() {
+        return R.layout.activity_main;
     }
 
-    private void initData() {
+    @Override
+    protected void initTitle() {
+
+    }
+
+    @Override
+    protected void initData() {
         homeFragment = new HomeFragment();
         investFragment = new InvestFragment();
         moreFragment = new MoreFragment();
         propertyFragment = new PropertyFragment();
         switchFragment(homeFragment);
     }
-
-    private void initListener() {
+    @Override
+    protected void initListener() {
         mainRg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -100,9 +98,5 @@ public class MainActivity extends AppCompatActivity {
         Toast.makeText(MainActivity.this, "双击退出应用", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        AppManager.getInstance().removeActivity(this);
-    }
+
 }

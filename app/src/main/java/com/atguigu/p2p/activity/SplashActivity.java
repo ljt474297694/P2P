@@ -3,8 +3,6 @@ package com.atguigu.p2p.activity;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
-import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
@@ -12,12 +10,10 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atguigu.p2p.R;
-import com.atguigu.p2p.utils.AppManager;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
-public class SplashActivity extends AppCompatActivity {
+public class SplashActivity extends BaseActivity {
 
     @Bind(R.id.iv_welcome_icon)
     ImageView ivWelcomeIcon;
@@ -26,22 +22,29 @@ public class SplashActivity extends AppCompatActivity {
     @Bind(R.id.activity_splash)
     RelativeLayout activitySplash;
 
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_splash);
-        ButterKnife.bind(this);
-        AppManager.getInstance().addActivity(this);
-        initData();
+    protected int setLayoutId() {
+        return R.layout.activity_splash;
     }
 
-    private void initData() {
+    @Override
+    protected void initTitle() {
+
+    }
+
+    protected void initData() {
         setVersion();
         setAnimation();
     }
 
+    @Override
+    protected void initListener() {
+
+    }
+
     private void setAnimation() {
-        AlphaAnimation animation = new AlphaAnimation(0,1);
+        AlphaAnimation animation = new AlphaAnimation(0, 1);
         animation.setDuration(2000);
         activitySplash.startAnimation(animation);
         animation.setAnimationListener(new Animation.AnimationListener() {
@@ -52,9 +55,14 @@ public class SplashActivity extends AppCompatActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-
-                startActivity(new Intent(SplashActivity.this,MainActivity.class));
-                AppManager.getInstance().removeActivity(SplashActivity.this);
+                if (isLogin()) {                   //登录过进入主界面
+                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                    finish();
+                } else {
+                    //没有登录过进入登录界面
+                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                    finish();
+                }
             }
 
             @Override
@@ -62,6 +70,10 @@ public class SplashActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    private boolean isLogin() {
+        return false;
     }
 
     private void setVersion() {
@@ -79,7 +91,7 @@ public class SplashActivity extends AppCompatActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        return "1.0";
+        return "1.1";
     }
 
     @Override

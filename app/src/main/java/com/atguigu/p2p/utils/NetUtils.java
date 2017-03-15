@@ -5,8 +5,11 @@ import android.text.TextUtils;
 import com.google.gson.Gson;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.RequestParams;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.StringCallback;
+
+import java.util.Map;
 
 import okhttp3.Call;
 
@@ -69,37 +72,61 @@ public class NetUtils {
      * @param clazz  clazz必须和result的泛型保持一致 否则会抛类型转换的异常
      * @param result resultBean 回调bean的接口
      */
-    public void asyncHttpPost ( String url, final Class clazz, final resultBean result) {
-        if (result == null) {
-            return;
-        }
-        if (TextUtils.isEmpty(url)) {
-            result.onError("url为空无法请求");
-            return;
-        }
-        if (clazz == null) {
-            result.onError("字节码为空无法请求");
-            return;
-        }
-        new AsyncHttpClient().post(url,new AsyncHttpResponseHandler(){
+    public void asyncHttpPost ( String url, final resultBean result) {
+        AsyncHttpClient httpClient = new AsyncHttpClient();
+
+        httpClient.post(url, new AsyncHttpResponseHandler() {
             @Override
             public void onSuccess(String content) {
                 super.onSuccess(content);
-                if (TextUtils.isEmpty(content)) {
-                    result.onError("请求结果为空 无法解析");
-                    return;
+
+                if (result != null) {
+                    result.onResponse(content);
                 }
-                result.onResponse(new Gson().fromJson(content, clazz));
             }
 
             @Override
             public void onFailure(Throwable error, String content) {
                 super.onFailure(error, content);
-                result.onError(content);
+                if (result != null) {
+                    result.onError(content);
+                }
+
             }
         });
     }
+    public void asyncHttpPost (String url, Map<String,String> map, final resultBean result) {
+        if(map==null) {
+            asyncHttpPost(url,result);
+            return;
+        }
+        AsyncHttpClient httpClient = new AsyncHttpClient();
 
+        RequestParams params = new RequestParams();
+
+        for (String key : map.keySet()) {
+            params.put(key,map.get(key));
+        }
+        httpClient.post(url,params, new AsyncHttpResponseHandler() {
+            @Override
+            public void onSuccess(String content) {
+                super.onSuccess(content);
+
+                if (result != null) {
+                    result.onResponse(content);
+                }
+            }
+
+            @Override
+            public void onFailure(Throwable error, String content) {
+                super.onFailure(error, content);
+                if (result != null) {
+                    result.onError(content);
+                }
+
+            }
+        });
+    }
 
     public interface resultBean<Bean> {
         void onResponse(Bean bean);

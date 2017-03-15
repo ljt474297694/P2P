@@ -1,12 +1,6 @@
 package com.atguigu.p2p.fragment;
 
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.TextView;
+import com.atguigu.p2p.R;
 
 /**
  * Created by 李金桐 on 2017/3/10.
@@ -14,12 +8,24 @@ import android.widget.TextView;
  * 功能: xxxx
  */
 
-public class PropertyFragment extends Fragment {
-    @Nullable
+public class PropertyFragment extends BaseFragment {
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        TextView textView = new TextView(getActivity());
-        textView.setText("property");
-        return textView;
+    protected String setUrl() {
+        return null;
+    }
+
+    @Override
+    protected int setLayout() {
+        return R.layout.fragment_property;
+    }
+
+    @Override
+    protected void initData(String json, String error) {
+
+    }
+
+    @Override
+    protected void initListener() {
+
     }
 }
