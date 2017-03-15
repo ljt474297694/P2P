@@ -69,7 +69,6 @@ public class NetUtils {
 
     /**
      * @param url    url
-     * @param clazz  clazz必须和result的泛型保持一致 否则会抛类型转换的异常
      * @param result resultBean 回调bean的接口
      */
     public void asyncHttpPost ( String url, final resultBean result) {

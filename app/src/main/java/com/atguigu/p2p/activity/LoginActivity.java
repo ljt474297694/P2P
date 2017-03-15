@@ -45,7 +45,6 @@ public class LoginActivity extends BaseActivity {
     Button btnLogin;
     @Bind(R.id.login_regitster_tv)
     TextView loginRegitsterTv;
-
     @Override
     protected int setLayoutId() {
         return R.layout.activity_login;
@@ -85,7 +84,6 @@ public class LoginActivity extends BaseActivity {
                 NetUtils.getInstance().asyncHttpPost(AppNetConfig.LOGIN, map, new NetUtils.resultBean<String>() {
                     @Override
                     public void onResponse(String o) {
-//                        Log.e("TAG", "LoginActivity onResponse()"+o);
                         JSONObject jsonObject = null;
                         try {
                             jsonObject = new JSONObject(o);
@@ -111,6 +109,12 @@ public class LoginActivity extends BaseActivity {
                         Log.e("TAG", "LoginActivity onError()");
                     }
                 });
+            }
+        });
+        loginRegitsterTv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(RegesterActivity.class);
             }
         });
     }

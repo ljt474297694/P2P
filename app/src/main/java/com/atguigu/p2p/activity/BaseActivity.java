@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.Toast;
 
-import com.atguigu.p2p.bean.DataBean;
 import com.atguigu.p2p.bean.UserInfo;
 import com.atguigu.p2p.utils.AppManager;
 
@@ -17,7 +16,7 @@ import butterknife.ButterKnife;
 /**
  * Created by 李金桐 on 2017/3/14.
  * QQ: 474297694
- * 功能: xxxx
+ * 功能: BaseActivity
  */
 
 public abstract class BaseActivity extends AppCompatActivity {
@@ -37,6 +36,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     protected abstract void initTitle();
 
     protected abstract void initData();
+
     protected abstract void initListener();
 
     protected void startActivity(Class activityClass){
@@ -72,15 +72,16 @@ public abstract class BaseActivity extends AppCompatActivity {
         String name = sp.getString("name", "");
         String phone = sp.getString("phone", "");
         UserInfo userInfo = new UserInfo();
-        DataBean dataBean = new DataBean();
+
+        UserInfo.DataBean dataBean = userInfo.new DataBean();
         dataBean.setImageurl(imageurl);
         dataBean.setIscredit(iscredit);
         dataBean.setName(name);
         dataBean.setPhone(phone);
+
         userInfo.setData(dataBean);
         return userInfo;
     }
-
 
 
 }

@@ -1,8 +1,8 @@
 package com.atguigu.p2p.activity;
 
-import android.content.Intent;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.text.TextUtils;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
 import android.widget.ImageView;
@@ -55,12 +55,12 @@ public class SplashActivity extends BaseActivity {
 
             @Override
             public void onAnimationEnd(Animation animation) {
-                if (isLogin()) {                   //登录过进入主界面
-                    startActivity(new Intent(SplashActivity.this, MainActivity.class));
+                if (isLogin()) {                   //登录过进入主界面,m.
+                    startActivity(MainActivity.class);
                     finish();
                 } else {
                     //没有登录过进入登录界面
-                    startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+                    startActivity(LoginActivity.class);
                     finish();
                 }
             }
@@ -72,7 +72,11 @@ public class SplashActivity extends BaseActivity {
     }
 
     private boolean isLogin() {
-        return false;
+        String name = getUser().getData().getName();
+        if(TextUtils.isEmpty(name)) {
+            return false;
+        }
+        return true;
     }
 
     private void setVersion() {
@@ -90,7 +94,7 @@ public class SplashActivity extends BaseActivity {
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-        return "1.1";
+        return "1.0";
     }
 
     @Override
