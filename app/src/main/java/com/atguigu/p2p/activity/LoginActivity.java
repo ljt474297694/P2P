@@ -10,8 +10,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atguigu.p2p.R;
+import com.atguigu.p2p.bean.UserInfo;
 import com.atguigu.p2p.utils.AppNetConfig;
 import com.atguigu.p2p.utils.NetUtils;
+import com.google.gson.Gson;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -66,21 +71,39 @@ public class LoginActivity extends BaseActivity {
                 //校验
                 String phone = loginEtNumber.getText().toString().trim();
                 String pw = loginEtPwd.getText().toString().trim();
-                if (TextUtils.isEmpty(phone)){
+                if (TextUtils.isEmpty(phone)) {
                     showToast("账号不能为空");
                     return;
                 }
-                if (TextUtils.isEmpty(pw)){
+                if (TextUtils.isEmpty(pw)) {
                     showToast("密码不能为空");
                     return;
                 }
-                Map<String,String> map = new HashMap<String, String>();
-                map.put("phone",phone);
-                map.put("password",pw);
+                Map<String, String> map = new HashMap<String, String>();
+                map.put("phone", phone);
+                map.put("password", pw);
                 NetUtils.getInstance().asyncHttpPost(AppNetConfig.LOGIN, map, new NetUtils.resultBean<String>() {
                     @Override
                     public void onResponse(String o) {
-                        Log.e("TAG", "LoginActivity onResponse()"+o);
+//                        Log.e("TAG", "LoginActivity onResponse()"+o);
+                        JSONObject jsonObject = null;
+                        try {
+                            jsonObject = new JSONObject(o);
+                            boolean s = jsonObject.optBoolean("success");
+                            if (s) {
+                                UserInfo userInfo = new Gson().fromJson(o, UserInfo.class);
+                                saveUser(userInfo);
+                                //跳转
+                                startActivity(MainActivity.class);
+                                //结束当前页面
+                                finish();
+                            } else {
+                                showToast("账号不存在或者密码错误");
+                            }
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
                     }
 
                     @Override
@@ -88,8 +111,6 @@ public class LoginActivity extends BaseActivity {
                         Log.e("TAG", "LoginActivity onError()");
                     }
                 });
-
-
             }
         });
     }
