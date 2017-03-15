@@ -13,7 +13,6 @@ public class ThreadPool {
     private ThreadPool() {
     }
 
-    ;
 
     private static ThreadPool threadPool = new ThreadPool();
 

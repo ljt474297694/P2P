@@ -41,5 +41,11 @@ public class InvestViewHolder extends BaseHolder<InvestAllBean.DataBean> {
     protected void bindViewData() {
         pName.setText(data.getName());
         pProgresss.setProgress(Integer.parseInt(data.getProgress()));
+        pMoney.setText(data.getMoney());
+        pMinnum.setText(data.getMinTouMoney());
+        pYearlv.setText(data.getYearRate());
+        pSuodingdays.setText(data.getSuodingDays());
+        pMinzouzi.setText(data.getId());
+
     }
 }
