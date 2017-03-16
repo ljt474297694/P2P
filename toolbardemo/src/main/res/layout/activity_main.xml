@@ -8,10 +8,12 @@
     tools:context="com.atguigu.toolbardemo.MainActivity">
 
     <android.support.design.widget.CoordinatorLayout
+        android:id="@+id/coordinatorlayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <android.support.design.widget.AppBarLayout
+
             android:id="@+id/appbar"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -24,11 +26,11 @@
                 android:minHeight="?attr/actionBarSize"
                 app:layout_scrollFlags="scroll|enterAlways"
                >
-
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="我是TextView" />
+                    android:text="自定义View"
+                    android:textSize="10sp"/>
             </android.support.v7.widget.Toolbar>
 
             <android.support.design.widget.TabLayout

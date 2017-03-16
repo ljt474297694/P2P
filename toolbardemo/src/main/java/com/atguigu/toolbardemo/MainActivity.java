@@ -2,6 +2,7 @@ package com.atguigu.toolbardemo;
 
 import android.os.Bundle;
 import android.support.design.widget.AppBarLayout;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -11,6 +12,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -23,6 +25,9 @@ import java.util.List;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
+/**
+ * toolBar + CoordinatorLayout
+ */
 public class MainActivity extends AppCompatActivity {
 
     @Bind(R.id.toolBar)
@@ -37,12 +42,14 @@ public class MainActivity extends AppCompatActivity {
     ListView listview;
     @Bind(R.id.drawerlayout)
     DrawerLayout drawerlayout;
-
-
     List<Fragment> fragments;
 
     List<String> datas;
+    @Bind(R.id.coordinatorlayout)
+    CoordinatorLayout coordinatorlayout;
+
     private ActionBarDrawerToggle mDrawerToggle;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +59,6 @@ public class MainActivity extends AppCompatActivity {
         initView();
         initData();
         initListener();
-
 
     }
 
@@ -70,13 +76,14 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < fragments.size(); i++) {
             datas.add("第" + (i + 1) + "页");
         }
+
         listview.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, datas));
 
 
     }
 
     private void initListener() {
-
+        appbar.setExpanded(true, false);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -92,6 +99,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        toolBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int menuItemId = item.getItemId();
+
+                if (menuItemId == R.id.action_item1) {
+                    Toast.makeText(MainActivity.this , R.string.item_01 , Toast.LENGTH_SHORT).show();
+
+                } else if (menuItemId == R.id.action_item2) {
+                    Toast.makeText(MainActivity.this , R.string.item_02 , Toast.LENGTH_SHORT).show();
+
+                }
+                return true;
+            }
+        });
     }
 
     private void initView() {
@@ -100,9 +122,11 @@ public class MainActivity extends AppCompatActivity {
         toolBar.setTitle("L.T");
         toolBar.setSubtitle("L.T副标题");
         toolBar.setNavigationIcon(android.R.drawable.ic_menu_delete);
+        toolBar.inflateMenu(R.menu.toolbar_menu);//设置右上角的填充菜单
 //        setSupportActionBar(toolBar);
 //        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        //设置按键监听 绑定drawerlayout 和 toolBar 让有效果
 //        mDrawerToggle = new ActionBarDrawerToggle(this, drawerlayout, toolBar, R.string.open, R.string.close) {
 //            @Override
 //            public void onDrawerOpened(View drawerView) {
@@ -115,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
 //            }
 //        };
 //        mDrawerToggle.syncState();//设置动画样式
+        //绑定到drawerlayout上
 //        drawerlayout.addDrawerListener(mDrawerToggle);
 
     }
@@ -141,4 +166,11 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        if (item.getItemId() == android.R.id.home) {
+//            Toast.makeText(MainActivity.this, "回退键", Toast.LENGTH_SHORT).show();
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 }
