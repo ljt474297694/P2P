@@ -83,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initListener() {
-        appbar.setExpanded(true, false);
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
