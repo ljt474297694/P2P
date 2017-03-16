@@ -8,6 +8,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
@@ -41,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
     List<Fragment> fragments;
 
     List<String> datas;
+    private ActionBarDrawerToggle mDrawerToggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,8 +67,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         datas = new ArrayList<>();
-        for(int i = 0; i <fragments.size() ; i++) {
-          datas.add("第"+(i+1)+"页");
+        for (int i = 0; i < fragments.size(); i++) {
+            datas.add("第" + (i + 1) + "页");
         }
         listview.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, datas));
 
@@ -74,12 +76,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initListener() {
-        toolBar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(MainActivity.this, "删除", Toast.LENGTH_SHORT).show();
-            }
-        });
 
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -89,14 +85,37 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        toolBar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MainActivity.this, "NavigationIcon", Toast.LENGTH_SHORT).show();
+            }
+        });
+
     }
 
     private void initView() {
         ButterKnife.bind(this);
         toolBar.setLogo(R.mipmap.ic_launcher);
-        toolBar.setNavigationIcon(android.R.drawable.ic_menu_delete);
         toolBar.setTitle("L.T");
         toolBar.setSubtitle("L.T副标题");
+        toolBar.setNavigationIcon(android.R.drawable.ic_menu_delete);
+//        setSupportActionBar(toolBar);
+//        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        mDrawerToggle = new ActionBarDrawerToggle(this, drawerlayout, toolBar, R.string.open, R.string.close) {
+//            @Override
+//            public void onDrawerOpened(View drawerView) {
+//                super.onDrawerOpened(drawerView);
+//            }
+//
+//            @Override
+//            public void onDrawerClosed(View drawerView) {
+//                super.onDrawerClosed(drawerView);
+//            }
+//        };
+//        mDrawerToggle.syncState();//设置动画样式
+//        drawerlayout.addDrawerListener(mDrawerToggle);
 
     }
 
