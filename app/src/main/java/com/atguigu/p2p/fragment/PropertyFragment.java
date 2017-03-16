@@ -1,18 +1,21 @@
 package com.atguigu.p2p.fragment;
 
-import android.graphics.Color;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.atguigu.p2p.R;
 import com.atguigu.p2p.activity.BaseActivity;
+import com.atguigu.p2p.activity.SettingActivity;
 import com.atguigu.p2p.utils.AppNetConfig;
+import com.atguigu.p2p.utils.BitmapUtils;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import butterknife.Bind;
-import jp.wasabeef.picasso.transformations.ColorFilterTransformation;
-import jp.wasabeef.picasso.transformations.CropCircleTransformation;
 
 /**
  * Created by 李金桐 on 2017/3/10.
@@ -41,6 +44,7 @@ public class PropertyFragment extends BaseFragment {
     TextView llTouziZhiguan;
     @Bind(R.id.ll_zichan)
     TextView llZichan;
+    private Bitmap circleBitmap;
 
     @Override
     protected String setUrl() {
@@ -58,27 +62,32 @@ public class PropertyFragment extends BaseFragment {
 
         tvMeName.setText(activity.getUser().getData().getName());
         Picasso.with(getActivity()).load(AppNetConfig.BASE_URL + "/images/tx.png")
-//                .transform(new Transformation() {
-//                    @Override
-//                    public Bitmap transform(Bitmap source) {
-//                        Bitmap circleBitmap = BitmapUtils.circleBitmap(source);
-//                        source.recycle();
-//                        return circleBitmap;
-//                    }
-//
-//                    @Override
-//                    public String key() {
-//                        return "";
-//                    }
-//                })
-                .transform(new CropCircleTransformation())
-                .transform(new ColorFilterTransformation(Color.parseColor("#66FFccff")))
+                .transform(new Transformation() {
+                    @Override
+                    public Bitmap transform(Bitmap source) {
+                        circleBitmap = BitmapUtils.circleBitmap(source);
+                        source.recycle();
+                        return circleBitmap;
+                    }
+
+                    @Override
+                    public String key() {
+                        return "";
+                    }
+                })
+//                .transform(new CropCircleTransformation())
+//                .transform(new ColorFilterTransformation(Color.parseColor("#66FFccff")))
                 .into(ivMeIcon);
     }
 
     @Override
     protected void initListener() {
-
+        tvSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(getActivity(), SettingActivity.class).putExtra("image",circleBitmap));
+            }
+        });
     }
 
 }

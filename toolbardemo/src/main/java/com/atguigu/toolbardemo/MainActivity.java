@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -49,7 +50,7 @@ public class MainActivity extends AppCompatActivity {
     CoordinatorLayout coordinatorlayout;
 
     private ActionBarDrawerToggle mDrawerToggle;
-
+    private boolean isOpen = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,6 +84,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initListener() {
+
         listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -95,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(MainActivity.this, "NavigationIcon", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -122,6 +125,7 @@ public class MainActivity extends AppCompatActivity {
         toolBar.setSubtitle("L.T副标题");
         toolBar.setNavigationIcon(android.R.drawable.ic_menu_delete);
         toolBar.inflateMenu(R.menu.toolbar_menu);//设置右上角的填充菜单
+
 //        setSupportActionBar(toolBar);
 //        getSupportActionBar().setHomeButtonEnabled(true); //设置返回键可用
 //        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -172,4 +176,38 @@ public class MainActivity extends AppCompatActivity {
 //        }
 //        return super.onOptionsItemSelected(item);
 //    }
+
+private int startY;
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        int eventY = (int) ev.getY();
+        switch (ev.getAction()) {
+            case  MotionEvent.ACTION_DOWN:
+                startY = eventY;
+                break;
+            case  MotionEvent.ACTION_MOVE:
+
+                break;
+            case  MotionEvent.ACTION_UP:
+                if(isOpen) {
+                    if(startY-eventY>toolBar.getHeight()/2) {
+                        appbar.setExpanded(false);
+                        isOpen=false;
+                    }else {
+                        appbar.setExpanded(true);
+                        isOpen=true;
+                    }
+                }else{
+                    if(eventY-startY>toolBar.getHeight()/2) {
+                        appbar.setExpanded(true);
+                        isOpen=true;
+                    }else{
+                        appbar.setExpanded(false);
+                        isOpen=false;
+                    }
+                }
+                break;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
 }

@@ -57,5 +57,5 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="#e8e8e8"
-        android:text="侧滑" />
+         />
 </android.support.v4.widget.DrawerLayout>
