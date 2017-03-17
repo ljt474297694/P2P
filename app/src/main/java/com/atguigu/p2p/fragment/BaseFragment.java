@@ -1,5 +1,6 @@
 package com.atguigu.p2p.fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.LayoutRes;
 import android.support.annotation.Nullable;
@@ -64,5 +65,9 @@ public  abstract class BaseFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    protected void startActivity(Class clazz) {
+        startActivity(new Intent(getActivity(),clazz));
     }
 }

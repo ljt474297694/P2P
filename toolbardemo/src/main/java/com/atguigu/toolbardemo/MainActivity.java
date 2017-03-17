@@ -71,8 +71,6 @@ public class MainActivity extends AppCompatActivity {
         viewpager.setAdapter(new PagerAdapter(getSupportFragmentManager()));
         tabLayout.setupWithViewPager(viewpager);
         tabLayout.setTabMode(TabLayout.MODE_SCROLLABLE);
-
-
         datas = new ArrayList<>();
         for (int i = 0; i < fragments.size(); i++) {
             datas.add("第" + (i + 1) + "页");
@@ -107,10 +105,10 @@ public class MainActivity extends AppCompatActivity {
                 int menuItemId = item.getItemId();
 
                 if (menuItemId == R.id.action_item1) {
-                    Toast.makeText(MainActivity.this , R.string.item_01 , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.item_01, Toast.LENGTH_SHORT).show();
 
                 } else if (menuItemId == R.id.action_item2) {
-                    Toast.makeText(MainActivity.this , R.string.item_02 , Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, R.string.item_02, Toast.LENGTH_SHORT).show();
 
                 }
                 return true;
@@ -177,35 +175,39 @@ public class MainActivity extends AppCompatActivity {
 //        return super.onOptionsItemSelected(item);
 //    }
 
-private int startY;
+    private int startY;
+    private int startX;
+    private boolean isScrollY;
+
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         int eventY = (int) ev.getY();
+        int eventX = (int) ev.getX();
         switch (ev.getAction()) {
-            case  MotionEvent.ACTION_DOWN:
+            case MotionEvent.ACTION_DOWN:
                 startY = eventY;
+                startX = eventX;
                 break;
-            case  MotionEvent.ACTION_MOVE:
-
+            case MotionEvent.ACTION_MOVE:
                 break;
-            case  MotionEvent.ACTION_UP:
-                if(isOpen) {
-                    if(startY-eventY>toolBar.getHeight()/2) {
-                        appbar.setExpanded(false);
-                        isOpen=false;
-                    }else {
-                        appbar.setExpanded(true);
-                        isOpen=true;
+            case MotionEvent.ACTION_UP:
+                    if (isOpen) {
+                        if (startY - eventY > toolBar.getHeight() * 0.4) {
+                            appbar.setExpanded(false);
+                            isOpen = false;
+                        } else {
+                            appbar.setExpanded(true);
+                            isOpen = true;
+                        }
+                    } else {
+                        if (eventY - startY > toolBar.getHeight() * 0.4) {
+                            appbar.setExpanded(true);
+                            isOpen = true;
+                        } else {
+                            appbar.setExpanded(false);
+                            isOpen = false;
+                        }
                     }
-                }else{
-                    if(eventY-startY>toolBar.getHeight()/2) {
-                        appbar.setExpanded(true);
-                        isOpen=true;
-                    }else{
-                        appbar.setExpanded(false);
-                        isOpen=false;
-                    }
-                }
                 break;
         }
         return super.dispatchTouchEvent(ev);

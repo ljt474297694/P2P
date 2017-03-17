@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,7 +13,6 @@ import com.atguigu.p2p.R;
 import com.atguigu.p2p.utils.AppManager;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 public class SettingActivity extends BaseActivity {
@@ -68,10 +66,5 @@ public class SettingActivity extends BaseActivity {
                 .show();
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        // TODO: add setContentView(...) invocation
-        ButterKnife.bind(this);
-    }
+
 }

@@ -9,7 +9,11 @@ import android.widget.TextView;
 
 import com.atguigu.p2p.R;
 import com.atguigu.p2p.activity.BaseActivity;
+import com.atguigu.p2p.activity.PayActivity;
 import com.atguigu.p2p.activity.SettingActivity;
+import com.atguigu.p2p.activity.TouziActivity;
+import com.atguigu.p2p.activity.TouziZhiguanActivity;
+import com.atguigu.p2p.activity.ZichanActivity;
 import com.atguigu.p2p.utils.AppNetConfig;
 import com.atguigu.p2p.utils.BitmapUtils;
 import com.squareup.picasso.Picasso;
@@ -86,6 +90,36 @@ public class PropertyFragment extends BaseFragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(getActivity(), SettingActivity.class).putExtra("image",circleBitmap));
+            }
+        });
+        llTouzi.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(TouziActivity.class);
+            }
+        });
+        llTouziZhiguan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(TouziZhiguanActivity.class);
+            }
+        });
+        llZichan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(ZichanActivity.class);
+            }
+        });
+        recharge.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            startActivity(PayActivity.class);
+            }
+        });
+        withdraw.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
             }
         });
     }
