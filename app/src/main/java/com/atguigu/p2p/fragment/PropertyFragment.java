@@ -89,7 +89,7 @@ public class PropertyFragment extends BaseFragment {
         tvSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), SettingActivity.class).putExtra("image",circleBitmap));
+                startActivityForResult(new Intent(getActivity(), SettingActivity.class).putExtra("image",circleBitmap),0);
             }
         });
         llTouzi.setOnClickListener(new View.OnClickListener() {
@@ -124,4 +124,14 @@ public class PropertyFragment extends BaseFragment {
         });
     }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data!=null) {
+            Bitmap bitmap = data.getParcelableExtra("image");
+            if(bitmap!=null) {
+                ivMeIcon.setImageBitmap(bitmap);
+            }
+        }
+    }
 }

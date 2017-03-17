@@ -178,7 +178,8 @@ public class MainActivity extends AppCompatActivity {
     private int startY;
     private int startX;
     private boolean isScrollY;
-
+    private boolean isFirst;
+    //tollBar 回弹效果
     @Override
     public boolean dispatchTouchEvent(MotionEvent ev) {
         int eventY = (int) ev.getY();
@@ -187,10 +188,21 @@ public class MainActivity extends AppCompatActivity {
             case MotionEvent.ACTION_DOWN:
                 startY = eventY;
                 startX = eventX;
+                isFirst = true;
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (isFirst) {
+                    if (Math.abs(eventX - startX) > Math.abs(eventY - startY) && Math.abs(eventX - startX) > UiUtils.dp2px(this, 10)) {
+                        isScrollY = false;
+                        isFirst = false;
+                    }else if (Math.abs(eventY - startY) > Math.abs(eventX - startX) && Math.abs(eventY - startY) > UiUtils.dp2px(this, 10)){
+                        isScrollY = true;
+                        isFirst = false;
+                    }
+                }
                 break;
             case MotionEvent.ACTION_UP:
+                if(isScrollY) {
                     if (isOpen) {
                         if (startY - eventY > toolBar.getHeight() * 0.4) {
                             appbar.setExpanded(false);
@@ -208,6 +220,7 @@ public class MainActivity extends AppCompatActivity {
                             isOpen = false;
                         }
                     }
+                }
                 break;
         }
         return super.dispatchTouchEvent(ev);
