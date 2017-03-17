@@ -60,7 +60,8 @@
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind" />
-        <activity android:name=".activity.PayActivity"></activity>
+        <activity android:name=".activity.PayActivity" />
+        <activity android:name=".fragment.TiXianActivity"></activity>
     </application>
 
 </manifest>
