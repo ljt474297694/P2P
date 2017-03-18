@@ -10,6 +10,7 @@ package com.atguigu.p2p.wxapi;
 
 import android.content.Intent;
 import android.widget.Toast;
+
 import cn.sharesdk.wechat.utils.WXAppExtendObject;
 import cn.sharesdk.wechat.utils.WXMediaMessage;
 import cn.sharesdk.wechat.utils.WechatHandlerActivity;

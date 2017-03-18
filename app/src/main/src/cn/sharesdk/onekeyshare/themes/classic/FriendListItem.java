@@ -16,11 +16,12 @@ import android.view.Gravity;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import cn.sharesdk.onekeyshare.themes.classic.FriendAdapter.Following;
 
 import com.mob.tools.gui.AsyncImageView;
 import com.mob.tools.gui.BitmapProcessor;
 import com.mob.tools.utils.ResHelper;
+
+import cn.sharesdk.onekeyshare.themes.classic.FriendAdapter.Following;
 
 /** 好友列表的item */
 public class FriendListItem extends LinearLayout {
