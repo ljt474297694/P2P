@@ -200,11 +200,20 @@ public class MainActivity extends AppCompatActivity {
                         isFirst = false;
                     }
                 }
+                if(isOpen) {
+                    if(startY<eventY) {
+                        startY= eventY;
+                    }
+                }else{
+                    if(startY>eventY) {
+                        startY= eventY;
+                    }
+                }
                 break;
             case MotionEvent.ACTION_UP:
                 if(isScrollY) {
                     if (isOpen) {
-                        if (startY - eventY > toolBar.getHeight() * 0.4) {
+                        if (startY - eventY > toolBar.getHeight() * 0.5) {
                             appbar.setExpanded(false);
                             isOpen = false;
                         } else {
@@ -212,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
                             isOpen = true;
                         }
                     } else {
-                        if (eventY - startY > toolBar.getHeight() * 0.4) {
+                        if (eventY - startY > toolBar.getHeight() * 0.5) {
                             appbar.setExpanded(true);
                             isOpen = true;
                         } else {

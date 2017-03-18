@@ -59,7 +59,8 @@ public abstract class LoadingPager extends FrameLayout {
 
         errorView = View.inflate(mContext, R.layout.page_error, null);
         addView(errorView, params);
-
+        sucessView = View.inflate(mContext, setLayoutId(), null);
+        addView(sucessView, params);
 
         //根据状态切换页面 默认是loading
         showStateView();
@@ -85,14 +86,13 @@ public abstract class LoadingPager extends FrameLayout {
     //加载数据回调给实现类
     public void loadData() {
 
-        if(setUrl()==null) {
+        if(TextUtils.isEmpty(setUrl())) {
             if(setLayoutId()==0) {
                 current_state = STATE_ERROR;
                 showStateView();
-
+                return;
             }
-            sucessView = View.inflate(mContext, setLayoutId(), null);
-            addView(sucessView, params);
+
 
             current_state = STATE_SUCCESS;
             showStateView();

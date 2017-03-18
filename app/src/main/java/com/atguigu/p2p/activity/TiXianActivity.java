@@ -1,5 +1,7 @@
-package com.atguigu.p2p.fragment;
+package com.atguigu.p2p.activity;
 
+import android.content.Context;
+import android.content.Intent;
 import android.text.Editable;
 import android.text.TextUtils;
 import android.text.TextWatcher;
@@ -12,7 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.atguigu.p2p.R;
-import com.atguigu.p2p.activity.BaseActivity;
 
 import butterknife.Bind;
 
@@ -97,8 +98,26 @@ public class TiXianActivity extends BaseActivity {
         btnTixian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(TiXianActivity.this, "提现申请成功", Toast.LENGTH_SHORT).show();
+                boolean aBoolean = getSharedPreferences("tog_state", Context.MODE_PRIVATE).getBoolean("isOpen", false);
+                
+                if(aBoolean) {
+                    startActivityForResult(new Intent(TiXianActivity.this,GestureVerifyActivity.class),0);
+                }
+
             }
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(data!=null) {
+            boolean msg = data.getBooleanExtra("msg", false);
+            if(msg) {
+                Toast.makeText(TiXianActivity.this, "提现申请成功", Toast.LENGTH_SHORT).show();
+            }else{
+                Toast.makeText(TiXianActivity.this, "提现申请失败", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

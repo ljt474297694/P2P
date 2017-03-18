@@ -11,6 +11,7 @@ import com.atguigu.p2p.R;
 import com.atguigu.p2p.activity.BaseActivity;
 import com.atguigu.p2p.activity.PayActivity;
 import com.atguigu.p2p.activity.SettingActivity;
+import com.atguigu.p2p.activity.TiXianActivity;
 import com.atguigu.p2p.activity.TouziActivity;
 import com.atguigu.p2p.activity.TouziZhiguanActivity;
 import com.atguigu.p2p.activity.ZichanActivity;
@@ -126,12 +127,12 @@ public class PropertyFragment extends BaseFragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(data!=null) {
-            Bitmap bitmap = data.getParcelableExtra("image");
-            if(bitmap!=null) {
-                ivMeIcon.setImageBitmap(bitmap);
-            }
+            super.onActivityResult(requestCode, resultCode, data);
+            if(data!=null) {
+                Bitmap bitmap = data.getParcelableExtra("image");
+                if(bitmap!=null) {
+                    ivMeIcon.setImageBitmap(bitmap);
+                }
         }
     }
 }

@@ -69,7 +69,10 @@ public class HomeFragment extends BaseFragment {
     @Override
     public void onStop() {
         super.onStop();
-        banner.stopAutoPlay();
+        if (banner != null) {
+
+            banner.stopAutoPlay();
+        }
     }
 
     @Override

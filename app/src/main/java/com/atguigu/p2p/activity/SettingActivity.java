@@ -66,7 +66,7 @@ public class SettingActivity extends BaseActivity {
 
     @Override
     protected void initData() {
-        Bitmap image = (Bitmap) getIntent().getParcelableExtra("image");
+        Bitmap image =  getIntent().getParcelableExtra("image");
         if(image!=null) {
 
             ivUserIcon.setImageBitmap(image);

@@ -6,6 +6,8 @@ import android.content.res.Configuration;
 import android.os.Handler;
 import android.util.Log;
 
+import cn.sharesdk.framework.ShareSDK;
+
 /**
  * Created by 李金桐 on 2017/3/10.
  * QQ: 474297694
@@ -23,6 +25,7 @@ public class Application extends android.app.Application {
     public void onCreate() {
         super.onCreate();
         application = this;
+        ShareSDK.initSDK(this);
         //上线阶段才会开启收集Bug类
 //        CrashHandler.getInstance().init();
     }

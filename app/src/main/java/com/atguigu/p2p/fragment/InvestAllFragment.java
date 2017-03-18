@@ -1,5 +1,6 @@
 package com.atguigu.p2p.fragment;
 
+import android.text.TextUtils;
 import android.widget.ListView;
 
 import com.atguigu.p2p.R;
@@ -32,6 +33,10 @@ public class InvestAllFragment extends BaseFragment {
 
     @Override
     protected void initData(String json, String error) {
+
+        if(TextUtils.isEmpty(json)) {
+            return;
+        }
         InvestAllBean investAllBean = new Gson().fromJson(json, InvestAllBean.class);
 
 //        InvestAllAdapter adapter =
