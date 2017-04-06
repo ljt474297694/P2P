@@ -1,27 +1,38 @@
 package com.atguigu.p2p.activity;
 
+import android.content.Intent;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.atguigu.p2p.R;
 import com.atguigu.p2p.bean.UserInfo;
 import com.atguigu.p2p.utils.AppNetConfig;
-import com.atguigu.p2p.utils.NetUtils;
+import com.atguigu.p2p.utils.RetrofitUtils;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.Bind;
+import io.reactivex.Observable;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
+import io.reactivex.schedulers.Schedulers;
+import retrofit2.http.FieldMap;
+import retrofit2.http.FormUrlEncoded;
+import retrofit2.http.POST;
+import retrofit2.http.Url;
 
 public class LoginActivity extends BaseActivity {
 
@@ -45,6 +56,7 @@ public class LoginActivity extends BaseActivity {
     Button btnLogin;
     @Bind(R.id.login_regitster_tv)
     TextView loginRegitsterTv;
+
     @Override
     protected int setLayoutId() {
         return R.layout.activity_login;
@@ -81,34 +93,40 @@ public class LoginActivity extends BaseActivity {
                 Map<String, String> map = new HashMap<String, String>();
                 map.put("phone", phone);
                 map.put("password", pw);
-                NetUtils.getInstance().asyncHttpPost(AppNetConfig.LOGIN, map, new NetUtils.resultBean<String>() {
-                    @Override
-                    public void onResponse(String o) {
-                        JSONObject jsonObject = null;
-                        try {
-                            jsonObject = new JSONObject(o);
-                            boolean s = jsonObject.optBoolean("success");
-                            if (s) {
-                                UserInfo userInfo = new Gson().fromJson(o, UserInfo.class);
-                                saveUser(userInfo);
-                                //跳转
-                                startActivity(MainActivity.class);
-                                //结束当前页面
-                                finish();
-                            } else {
-                                showToast("账号不存在或者密码错误");
+                new RetrofitUtils<LoginService>()
+                        .createRetrofitServes(AppNetConfig.BASE_URL, LoginService.class)
+                        .login("login", map).subscribeOn(Schedulers.io())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .map(new Function<JsonObject, String>() {
+                            @Override
+                            public String apply(JsonObject jsonObject) throws Exception {
+                                return jsonObject.toString();
                             }
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        })
+                        .filter(new Predicate<String>() {
+                            @Override
+                            public boolean test(String s) throws Exception {
+                                JSONObject jsonObject = new JSONObject(s);
+                                Boolean success = jsonObject.optBoolean("success");
+                                if (!success)
+                                    Toast.makeText(LoginActivity.this, "有问题,你检查下", Toast.LENGTH_SHORT).show();
+                                return success;
+                            }
+                        })
+                        .subscribe(new Consumer<String>() {
+                            @Override
+                            public void accept(String json) throws Exception {
+                                UserInfo userInfo = new Gson().fromJson(json, UserInfo.class);
+                                if (userInfo != null) {
+                                    saveUser(userInfo);
+                                    //跳转到登录页面
+                                    startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                    //结束此页
+                                    finish();
+                                }
+                            }
+                        });
 
-                    }
-
-                    @Override
-                    public void onError(String error) {
-                        Log.e("TAG", "LoginActivity onError()");
-                    }
-                });
             }
         });
         loginRegitsterTv.setOnClickListener(new View.OnClickListener() {
@@ -119,5 +137,10 @@ public class LoginActivity extends BaseActivity {
         });
     }
 
+    interface LoginService {
+        @FormUrlEncoded
+        @POST()
+        Observable<JsonObject> login(@Url String url, @FieldMap Map<String, String> map);
+    }
 
 }

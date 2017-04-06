@@ -1,1 +1,1 @@
-include ':app', ':toolbardemo', ':MPChartLib', ':GestureLock'
+include ':app', ':toolbardemo', ':MPChartLib', ':GestureLock', ':downloaddemo', ':gsyvideoplayerdemo'

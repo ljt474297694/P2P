@@ -34,8 +34,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import butterknife.Bind;
 
@@ -50,7 +48,6 @@ public class MainActivity extends BaseActivity {
     private PropertyFragment propertyFragment;
 
     private Fragment tempFragment;
-
 
     @Override
     protected int setLayoutId() {
@@ -97,14 +94,6 @@ public class MainActivity extends BaseActivity {
                 }
 
             });
-        }else{
-            //不要在动画没有执行完之前做进入主界面的动作
-            new Timer().schedule(new TimerTask() {
-                @Override
-                public void run() {
-                    showToast("当前没有网络");
-                }
-            },2000);
         }
     }
     private void updateVerison(final String apkUrl) {
